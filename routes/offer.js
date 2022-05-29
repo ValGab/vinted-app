@@ -216,7 +216,7 @@ router.get("/offers", async (req, res) => {
       }
     }
 
-    const perPage = 3; // ou const limit
+    const perPage = 5; // ou const limit
 
     const offers = await Offer.find(filters) // variable filters avec l'ajout des clés correspondantes aux query reçues
       .sort({ product_price: sort }) // ou variable sort avec l'ajout de clé à sort.product_price avec asc ou desc
