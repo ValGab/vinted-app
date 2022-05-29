@@ -1,20 +1,23 @@
 const express = require("express");
 const formidable = require("express-formidable");
 const mongoose = require("mongoose");
+require("dotenv").config(); // Permet d'activer les variables d'environnement qui se trouvent dans le fichier `.env`
+const cors = require("cors");
+
 // Import de cloudinary
 const cloudinary = require("cloudinary").v2;
 
 const app = express();
-
+app.use(cors());
 app.use(formidable());
 
-mongoose.connect("mongodb://localhost/vinted");
+mongoose.connect(process.env.MONGODB_URI);
 
 // Connexion à mon compte cloudinary
 cloudinary.config({
-  cloud_name: "dohratw0j",
-  api_key: "781322292736855",
-  api_secret: "yXbhGO9TyzLSYtHXw6pTc3Xg4cM",
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
 // Import du fichier user.js
