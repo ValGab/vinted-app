@@ -185,7 +185,7 @@ router.delete("/offer/delete", isAuthenticated, async (req, res) => {
 // Route pour afficher les annonces
 router.get("/offers", async (req, res) => {
   try {
-    const { title, priceMin, priceMax } = req.query;
+    const { title, priceMin, priceMax, limit } = req.query;
 
     let { page, sort } = req.query;
     if (!page) {
@@ -216,15 +216,15 @@ router.get("/offers", async (req, res) => {
       }
     }
 
-    const perPage = 5; // ou const limit
+    // const perPage = 5; // ou const limit
 
     const offers = await Offer.find(filters) // variable filters avec l'ajout des clés correspondantes aux query reçues
       .sort({ product_price: sort }) // ou variable sort avec l'ajout de clé à sort.product_price avec asc ou desc
       .select(
         "product_name product_details product_price product_image.secure_url"
       )
-      .skip(perPage * page - perPage)
-      .limit(perPage)
+      .skip(limit * page - limit)
+      .limit(limit)
       .populate("owner", "_id account");
 
     const count = await Offer.countDocuments(filters);
