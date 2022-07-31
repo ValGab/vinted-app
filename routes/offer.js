@@ -216,6 +216,10 @@ router.get("/offers", async (req, res) => {
       }
     }
 
+    if (limit) {
+      filters.limit = limit;
+    }
+
     // const perPage = 5; // ou const limit
 
     const offers = await Offer.find(filters) // variable filters avec l'ajout des clés correspondantes aux query reçues
