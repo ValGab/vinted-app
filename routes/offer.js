@@ -2,9 +2,7 @@ const express = require("express");
 const { is } = require("express/lib/request");
 const isAuthenticated = require("../middlewares/isAuthenticated");
 const cloudinary = require("cloudinary").v2;
-const stripe = require("stripe")(
-  "sk_test_51LWcWGCcxHLGTi1OYcTNOxlXIyWjWpIJLW6mKsvFJSKhslfodqdw5BZlnRDZ8XAC9XoJ2uE75j2gfcMogGnEG5AP00TcLiWErF"
-);
+const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY);
 
 const router = express.Router();
 
