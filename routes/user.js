@@ -15,7 +15,12 @@ router.post("/user/signup", async (req, res) => {
   try {
     const { username, email, password, newsletter } = req.fields;
 
-    if (username && email && password && newsletter) {
+    if (
+      username &&
+      email &&
+      password &&
+      (newsletter === false || newsletter === true)
+    ) {
       const userEmail = await User.findOne({ email });
       if (!userEmail) {
         const salt = uid2(16);
@@ -30,13 +35,17 @@ router.post("/user/signup", async (req, res) => {
           token,
         });
         // Upload de l'avatar sur cloudinary
-        const avatar = await cloudinary.uploader.upload(req.files.avatar.path, {
-          // Je rajoute une option pour enregistrer l'image dans un dossier spécial avec l'id de l'user
-          folder: `/vinted/users/${newUser._id}`,
-        });
+        if (req.files.avatar) {
+          const avatar = await cloudinary.uploader.upload(
+            req.files.avatar.path,
+            {
+              // Je rajoute une option pour enregistrer l'image dans un dossier spécial avec l'id de l'user
+              folder: `/vinted/users/${newUser._id}`,
+            }
+          );
 
-        newUser.account.avatar = avatar;
-
+          newUser.account.avatar = avatar;
+        }
         await newUser.save();
         // J'envoie une réponse au client
         const response = {
