@@ -256,7 +256,7 @@ router.get("/offer/:id", async (req, res) => {
 });
 
 // Route pour payer
-router.post("/offer/payment", async (req, res) => {
+router.post("/offer/payment", isAuthenticated, async (req, res) => {
   try {
     const response = await stripe.charges.create({
       amount: req.fields.amount * 100,
