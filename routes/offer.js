@@ -2,6 +2,9 @@ const express = require("express");
 const { is } = require("express/lib/request");
 const isAuthenticated = require("../middlewares/isAuthenticated");
 const cloudinary = require("cloudinary").v2;
+const stripe = require("stripe")(
+  "sk_test_51LWcWGCcxHLGTi1OYcTNOxlXIyWjWpIJLW6mKsvFJSKhslfodqdw5BZlnRDZ8XAC9XoJ2uE75j2gfcMogGnEG5AP00TcLiWErF"
+);
 
 const router = express.Router();
 
@@ -247,6 +250,27 @@ router.get("/offer/:id", async (req, res) => {
       "account _id"
     );
     res.status(200).json(offerToFind);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+// Route pour payer
+router.post("/offer/payment", isAuthenticated, async (req, res) => {
+  try {
+    const stripeToken = req.fields.stripeToken;
+    const response = await stripe.charges.create({
+      amount: req.fields.amount,
+      currency: "eur",
+      description: req.fields.description,
+      // On envoie ici le token
+      source: stripeToken,
+    });
+    if (response.status === "succeeded") {
+      res.status(200).json("Le paiement a bien été effectué");
+    } else {
+      res.status(400).json(response.status);
+    }
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
