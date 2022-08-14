@@ -258,13 +258,12 @@ router.get("/offer/:id", async (req, res) => {
 // Route pour payer
 router.post("/offer/payment", async (req, res) => {
   try {
-    const stripeToken = req.fields.stripeToken;
     const response = await stripe.charges.create({
-      amount: req.fields.amount,
+      amount: req.fields.amount * 100,
       currency: "eur",
       description: req.fields.description,
       // On envoie ici le token
-      source: stripeToken,
+      source: req.fields.stripeToken,
     });
     if (response.status === "succeeded") {
       res.status(200).json("Le paiement a bien été effectué");
