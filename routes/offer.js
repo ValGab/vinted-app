@@ -273,9 +273,11 @@ router.post("/offer/payment", isAuthenticated, async (req, res) => {
     if (response.status === "succeeded") {
       res.status(200).json("Le paiement a bien été effectué");
     } else {
+      console.log("réponse else =>", response);
       res.status(400).json(response.status);
     }
   } catch (error) {
+    console.log("catch =>", error);
     res.status(400).json({ message: error.message });
   }
 });
