@@ -3,13 +3,16 @@ const User = require("../models/User");
 const isAuthenticated = async (req, res, next) => {
   console.log("On rentre dans le middleware isA");
   try {
+    console.log("header =>", req.headers);
     if (req.headers.authorization) {
       // Je récupère le token envoyé en requête avec la méthode Bearer dans Postman
 
       const token = req.headers.authorization.replace("Bearer ", "");
       //   Chercher dans ma BDD mongodb si un user a bien ce token
+      console.log("token =>", token);
       const user = await User.findOne({ token }).select("account _id");
       //   J'en trouve 1
+      console.log("user =>", user);
       if (user) {
         //   J'ai fait une requête à ma BDD et j'ai des infos concernant le user que j'ai trouvé, je stocke ces informations dans req, comme ça je pourrai y avoir accès dans le reste de ma route
         req.user = user;

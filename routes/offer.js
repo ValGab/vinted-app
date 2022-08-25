@@ -6,7 +6,7 @@ const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY);
 
 const router = express.Router();
 
-// Import du modèle User
+// Import du modèle Offer
 const Offer = require("../models/Offer");
 
 // Route pour créer une annonce
@@ -256,13 +256,20 @@ router.get("/offer/:id", async (req, res) => {
 // Route pour payer
 router.post("/offer/payment", isAuthenticated, async (req, res) => {
   try {
+    console.log("Données reçues =>", req.fields);
     const response = await stripe.charges.create({
-      amount: req.fields.amount * 100,
+      amount: 10 * 100,
       currency: "eur",
-      description: req.fields.description,
+      description: "Description",
       // On envoie ici le token
       source: req.fields.stripeToken,
+      // amount: req.fields.amount * 100,
+      // currency: "eur",
+      // description: req.fields.description,
+      // // On envoie ici le token
+      // source: req.fields.stripeToken,
     });
+    console.log("response du back =>", response);
     if (response.status === "succeeded") {
       res.status(200).json("Le paiement a bien été effectué");
     } else {
