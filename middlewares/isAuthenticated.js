@@ -9,10 +9,10 @@ const isAuthenticated = async (req, res, next) => {
 
       const token = req.headers.authorization.replace("Bearer ", "");
       //   Chercher dans ma BDD mongodb si un user a bien ce token
-      console.log("token =>", token);
+      // console.log("token =>", token);
       const user = await User.findOne({ token }).select("account _id");
       //   J'en trouve 1
-      console.log("user =>", user);
+      // console.log("user =>", user);
       if (user) {
         //   J'ai fait une requête à ma BDD et j'ai des infos concernant le user que j'ai trouvé, je stocke ces informations dans req, comme ça je pourrai y avoir accès dans le reste de ma route
         req.user = user;

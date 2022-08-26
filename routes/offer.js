@@ -256,28 +256,23 @@ router.get("/offer/:id", async (req, res) => {
 // Route pour payer
 router.post("/offer/payment", isAuthenticated, async (req, res) => {
   try {
-    console.log("Données reçues =>", req.fields);
+    // console.log("Données reçues =>", req.fields);
     const response = await stripe.charges.create({
-      amount: 10 * 100,
+      amount: req.fields.amount * 100,
       currency: "eur",
-      description: "Description",
+      description: req.fields.description,
       // On envoie ici le token
       source: req.fields.stripeToken,
-      // amount: req.fields.amount * 100,
-      // currency: "eur",
-      // description: req.fields.description,
-      // // On envoie ici le token
-      // source: req.fields.stripeToken,
     });
-    console.log("response du back =>", response);
+    // console.log("response du back =>", response);
     if (response.status === "succeeded") {
       res.status(200).json("Le paiement a bien été effectué");
     } else {
-      console.log("réponse else =>", response);
+      // console.log("réponse else =>", response);
       res.status(400).json(response.status);
     }
   } catch (error) {
-    console.log("catch =>", error);
+    // console.log("catch =>", error);
     res.status(400).json({ message: error.message });
   }
 });
