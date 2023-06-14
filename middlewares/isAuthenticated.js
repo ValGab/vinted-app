@@ -20,7 +20,7 @@ const isAuthenticated = async (req, res, next) => {
         next();
       } else {
         //   Si je ne trouve pas mon user, je renvoie une erreur
-        res.status(401).json({ message: "Unauthorized" });
+        res.status(401).json({ message: "Unauthorized - user not found" });
       }
     } else {
       // Si je ne reçois pas de token en requête
